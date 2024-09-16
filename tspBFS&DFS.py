@@ -14,3 +14,5 @@ touchingNodes = {
     11: []
 }
 
+print('hello')
+
