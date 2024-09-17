@@ -1,27 +1,15 @@
 #permutations is used to extract every combination from the given coordinates
 #time is used to track the total time of the program
+from tspUtil import get_coordinates, calc_distance
 from itertools import permutations
 import time
 start = time.time()
 
 #initializing variables that will be used throughout the program
-tspFile = open("Random9.tsp", "r")
+tspFile = open("Random4.tsp", "r")
 coordinates = {}
 tspMap = {}
 total = 0
-
-
-#reads in file and seperates the coordinates into pairs within a dictionary
-def get_coordinates(file):
-    for line in file:
-        if line[0].isdigit():
-            splitLine = line.split(' ')
-            coordinates[int(splitLine[0]) - 1] = [float(splitLine[1])]
-            coordinates[int(splitLine[0]) - 1].append(float(splitLine[2]))
-
-#calculates distance between two coordinates
-def calc_distance(x1, y1, x2, y2):
-    return (((x2 - x1) ** 2) + ((y2 - y1) ** 2)) ** (1/2)
 
 #uses calc_distance function in tandem with the list of permutations to calculate every possible travelling salesman path
 def permutations_compute(permutation):
@@ -37,7 +25,7 @@ def permutations_compute(permutation):
 
 #creates permutations, calculates every possible path, then prints out the shortest route along with the points
 #associated with reaching that path
-get_coordinates(tspFile)
+get_coordinates(tspFile, coordinates)
 p = list(permutations(coordinates.keys()))
 permutations_compute(p)
 bestRoute = min(tspMap.keys())

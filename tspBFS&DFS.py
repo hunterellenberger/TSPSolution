@@ -1,4 +1,6 @@
-from tspbruteforce import get_coordinates, calc_distance
+from tspUtil import get_coordinates, calc_distance
+tspFile = open("11PointDFSBFS.tsp", "r")
+coordinates = {}
 
 touchingNodes = {
     1: [2, 3, 4],
@@ -14,5 +16,14 @@ touchingNodes = {
     11: []
 }
 
-print('hello')
+def breadthFirstSearch(nodeMap):
+    i = 1
+    while len(nodeMap[i]) != 0:
+        print(nodeMap[i])
+        i += 1
 
+breadthFirstSearch(touchingNodes)
+get_coordinates(tspFile, coordinates)
+print(coordinates)
+
+tspFile.close()
