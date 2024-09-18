@@ -1,4 +1,8 @@
+#import statements used to acquire functions for queue, distance formula, and lsp to coordinate dictionary converter
 from tspUtil import get_coordinates, calc_distance
+from collections import deque
+
+
 tspFile = open("11PointDFSBFS.tsp", "r")
 coordinates = {}
 
@@ -16,14 +20,17 @@ touchingNodes = {
     11: []
 }
 
-def breadthFirstSearch(nodeMap):
-    i = 1
-    while len(nodeMap[i]) != 0:
-        print(nodeMap[i])
-        i += 1
+def breadthFirstSearch(nodeMap, root):
+    bfsQueue = deque([root])
+    visitedNodes = []
+    while bfsQueue:
+        location = bfsQueue.popleft()
+        visitedNodes.append(location)
+        for edge in nodeMap[location]:
+            bfsQueue.append(edge)
+    print(visitedNodes)
 
-breadthFirstSearch(touchingNodes)
 get_coordinates(tspFile, coordinates)
-print(coordinates)
+breadthFirstSearch(touchingNodes, 1)
 
 tspFile.close()
