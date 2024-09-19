@@ -1,10 +1,11 @@
 #import statements used to acquire functions for queue, distance formula, and lsp to coordinate dictionary converter
-from tspUtil import get_coordinates, calc_distance
+from tspUtil import get_coordinates, calc_distance, permutations_compute
 from collections import deque
 
 
 tspFile = open("11PointDFSBFS.tsp", "r")
 coordinates = {}
+distances = {}
 
 touchingNodes = {
     1: [2, 3, 4],
@@ -21,16 +22,54 @@ touchingNodes = {
 }
 
 def breadthFirstSearch(nodeMap, root):
-    bfsQueue = deque([root])
-    visitedNodes = []
+    bfsQueue = deque([(root, [root])])  # Queue will store list of (current_node, path_to_node)
+    paths = []  # List to keep track of paths that reach final node
+
     while bfsQueue:
-        location = bfsQueue.popleft()
-        visitedNodes.append(location)
+        location, currentPath = bfsQueue.popleft()
+
+        # Check if the current node is a leaf node (no outgoing edges)
+        if not nodeMap[location]:  # If there are no edges for this node
+            paths.append(currentPath)  # Store the path to the leaf node
+
         for edge in nodeMap[location]:
-            bfsQueue.append(edge)
-    print(visitedNodes)
+            bfsQueue.append((edge, currentPath + [edge]))  # Append the new path
+
+    return paths
+
+def depthFirstSearch(nodeMap, root):
+    stack = [(root, [root])]  # Stack will store tuples of (current_node, path_to_node)
+    paths = []  # List to keep track of paths that reach leaf nodes
+
+    while stack:
+        location, currentPath = stack.pop()
+
+        # Check if the current node is a leaf node (no outgoing edges)
+        if not nodeMap[location]:  # If there are no edges for this node
+            paths.append(currentPath)  # Store the path to the leaf node
+
+        # Explore neighbors in reverse order to maintain the correct traversal order
+        for edge in reversed(nodeMap[location]):
+            stack.append((edge, currentPath + [edge]))  # Append the new path
+
+    return paths
 
 get_coordinates(tspFile, coordinates)
-breadthFirstSearch(touchingNodes, 1)
+
+bfs = breadthFirstSearch(touchingNodes, 1)
+
+permutations_compute(bfs, distances, coordinates)
+for key in distances:
+    print(f"{key}: {distances[key]}")
+bestRoute = min(distances.keys())
+print(bestRoute)
+
+dfs = depthFirstSearch(touchingNodes, 1)
+
+permutations_compute(dfs, distances, coordinates)
+for key in distances:
+    print(f"{key}: {distances[key]}")
+bestRoute = min(distances.keys())
+print(bestRoute)
 
 tspFile.close()
