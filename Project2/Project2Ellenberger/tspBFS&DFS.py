@@ -57,6 +57,8 @@ def depthFirstSearch(nodeMap, root):
 get_coordinates(tspFile, coordinates)
 
 bfs = breadthFirstSearch(touchingNodes, 1)
+print(bfs)
+print()
 
 permutations_compute(bfs, distances, coordinates)
 for key in distances:
@@ -64,14 +66,15 @@ for key in distances:
 bestRoute = max(distances.keys())
 print(bestRoute)
 
-dfs = depthFirstSearch(touchingNodes, 1)
-print()
+# dfs = depthFirstSearch(touchingNodes, 1)
+# print(dfs)
+# print()
 
-permutations_compute(dfs, distances, coordinates)
-for key in distances:
-    print(f"{key}: {distances[key]}")
-bestRoute = min(distances.keys())
-print(bestRoute)
+# permutations_compute(dfs, distances, coordinates)
+# for key in distances:
+#     print(f"{key}: {distances[key]}")
+# bestRoute = min(distances.keys())
+# print(bestRoute)
 
 end = time.time()
 print("The total time it took the program to execute is:", (end - start) * 10**3, "ms")
