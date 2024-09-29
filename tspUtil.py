@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np 
+
 #reads in file and seperates the coordinates into pairs within a dictionary
 def get_coordinates(file, dictionary):
     for line in file:
@@ -21,3 +24,18 @@ def permutations_compute(permutation, pathPlusDistances, nodes):
             pathPlusDistances[total] = [element]
         else:
             pathPlusDistances[total].append([element])
+
+def plotter(points):
+    xValues = []
+    yValues = []
+    for element in points.values():
+        xValues.append(element[0])
+        yValues.append(element[1])
+
+    plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    plt.rcParams["figure.autolayout"] = True
+
+    plt.plot(xValues, yValues, 'r*')
+    plt.axis([0, 100, 0, 100])
+
+    plt.show()
