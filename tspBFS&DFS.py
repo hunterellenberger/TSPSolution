@@ -22,7 +22,7 @@ touchingNodes = {
     11: []
 }
 
-def breadthFirstSearch(nodeMap, root):
+def breadth_first_search(nodeMap, root):
     bfsQueue = deque([(root, [root])])  # Queue will store list of (current_node, path_to_node)
     paths = []  # List to keep track of paths that reach final node
 
@@ -38,7 +38,7 @@ def breadthFirstSearch(nodeMap, root):
 
     return paths
 
-def depthFirstSearch(nodeMap, root):
+def depth_first_search(nodeMap, root):
     dfsStack = [(root, [root])]  # Stack will store tuples of (current_node, path_to_node)
     paths = []  # List to keep track of paths that reach final nodes
 
@@ -56,7 +56,7 @@ def depthFirstSearch(nodeMap, root):
 
 get_coordinates(tspFile, coordinates)
 
-bfs = breadthFirstSearch(touchingNodes, 1)
+bfs = breadth_first_search(touchingNodes, 1)
 
 permutations_compute(bfs, distances, coordinates)
 for key in distances:
@@ -64,7 +64,7 @@ for key in distances:
 bestRoute = max(distances.keys())
 print(bestRoute)
 
-dfs = depthFirstSearch(touchingNodes, 1)
+dfs = depth_first_search(touchingNodes, 1)
 print()
 
 permutations_compute(dfs, distances, coordinates)
