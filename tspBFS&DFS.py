@@ -1,5 +1,5 @@
 #import statements used to acquire functions for queue, distance formula, and lsp to coordinate dictionary converter
-from tspUtil import get_coordinates, calc_distance, permutations_compute
+from tspUtil import get_coordinates, calc_distance, permutations_compute, plotter
 from collections import deque
 import time
 start = time.time()
@@ -62,6 +62,7 @@ permutations_compute(bfs, distances, coordinates)
 for key in distances:
     print(f"{key}: {distances[key]}")
 bestRoute = max(distances.keys())
+# plotter(coordinates, distances[bestRoute][0])
 print(bestRoute)
 
 dfs = depth_first_search(touchingNodes, 1)

@@ -25,17 +25,22 @@ def permutations_compute(permutation, pathPlusDistances, nodes):
         else:
             pathPlusDistances[total].append([element])
 
-def plotter(points):
+def plotter(points, pathMap):
     xValues = []
     yValues = []
-    for element in points.values():
-        xValues.append(element[0])
-        yValues.append(element[1])
+    for element in pathMap:
+        xValues.append(points[element][0])
+        yValues.append(points[element][1])
+
+    
 
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
 
-    plt.plot(xValues, yValues, 'r*')
+    for i in range(0, len(xValues)):
+        plt.plot(xValues[:i + 1], yValues[:i + 1], 'red')
+
+    plt.plot(xValues, yValues, 'b*')
     plt.axis([0, 100, 0, 100])
 
     plt.show()
