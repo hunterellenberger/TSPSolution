@@ -1,9 +1,11 @@
 from tspUtil import get_coordinates, calc_distance, plotter
 from sys import maxsize
+import time
+start = time.time()
 
-
-tspFile = open("Random30.tsp", "r")
+tspFile = open("Random40.tsp", "r")
 coordinates = {}
+optimalSolution = [[], maxsize]
 x = []
 y = []
 
@@ -46,9 +48,19 @@ def greedy_insert(start, nodePlusCoordinate):
 
 
 get_coordinates(tspFile, coordinates)
-solution = greedy_insert(1, coordinates)
-print(solution)
-plotter(coordinates, solution[0])
 
 
+for i in range(1, len(coordinates.keys())):
+    currentSolution = greedy_insert(i, coordinates)
+    if currentSolution[1] < optimalSolution[1]:
+        optimalSolution[0] = currentSolution[0]
+        optimalSolution[1] = currentSolution[1]
+
+
+print(optimalSolution)
+plotter(coordinates, optimalSolution[0])
+
+
+end = time.time()
+print("The total time it took the program to execute is:", (end - start) * 10**3, "ms")
 tspFile.close()
