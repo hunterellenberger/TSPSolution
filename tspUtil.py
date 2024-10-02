@@ -25,14 +25,13 @@ def permutations_compute(permutation, pathPlusDistances, nodes):
         else:
             pathPlusDistances[total].append([element])
 
+#plots a graph of nodes visited based off the order specified in pathMap
 def plotter(points, pathMap):
     xValues = []
     yValues = []
     for element in pathMap:
         xValues.append(points[element][0])
         yValues.append(points[element][1])
-
-    
 
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
