@@ -63,6 +63,17 @@ def crossoverA(survivingGeneration):
             offsprings.append(offspring(parentTwo, parentOne))
     return offsprings
 
+def mutationOne(currentGeneration):
+    mutatedGeneration = []
+    for path in currentGeneration:
+        if randint(0, 10000) < 10:
+            indexOne = randint(0, len(path) - 1)
+            indexTwo = randint(0, len(path) - 1)
+            path[indexOne] = path[indexTwo]
+            path[indexTwo] = path[indexOne]
+        mutatedGeneration.append(path)
+    return mutatedGeneration
+
 get_coordinates(tspFile, coordinates)
 x = make_paths(60, 100)
 y = weed(x, coordinates)
