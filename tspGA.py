@@ -9,7 +9,6 @@ coordinates = {}    #holds nodes and their coordinates
 def path_distance(path, nodeAndDistance):
     totalLength = 0
     for i in range(0, len(path)):
-        print(i)
         if i == len(path) - 1:
             totalLength += calc_distance(nodeAndDistance[path[i]][0], nodeAndDistance[path[i]][1], nodeAndDistance[path[-1]][0], nodeAndDistance[path[-1]][1])
             return totalLength
@@ -42,17 +41,20 @@ def weed_generation(baseGeneration, nodeAndDistance):
 def offspring(parentOne, parentTwo):
     listOfOffspring = []
     extractStart = randint(0, len(parentOne) - 1)
-    extractEnd = randint(extractStart, len(parentOne) - 1)
-    subarrayOfOne = parentOne[extractStart : extractEnd]
-    leftoverTwoPath = list([element for element in parentTwo if element not in subarrayOfOne])
+    extractEnd = randint(extractStart, len(parentOne))
+    subarrayOfOne = parentOne[extractStart:extractEnd]
+    leftoverTwoPath = []
+    for element in parentTwo:
+        if element not in subarrayOfOne:
+            leftoverTwoPath.append(element)
     for iter in range(0, len(parentOne)):
         if extractStart <= iter < extractEnd:
-            offspring.append(subarrayOfOne.pop(0))
+            listOfOffspring.append(subarrayOfOne.pop(0))
         else:
-            offspring.append(leftoverTwoPath.pop(0))
+            listOfOffspring.append(leftoverTwoPath.pop(0))
     return listOfOffspring
 
-def crossoverA(survivingGeneration):
+def crossover_a(survivingGeneration):
     offsprings = []
     midpoint = len(survivingGeneration) // 2
     for iter in range(midpoint):
@@ -63,22 +65,36 @@ def crossoverA(survivingGeneration):
             offsprings.append(offspring(parentTwo, parentOne))
     return offsprings
 
-def mutationOne(currentGeneration):
+def mutation_one(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
         if randint(0, 10000) < 10:
-            indexOne = randint(0, len(path) - 1)
-            indexTwo = randint(0, len(path) - 1)
-            path[indexOne] = path[indexTwo]
-            path[indexTwo] = path[indexOne]
+            indexOne = randint(1, len(path) - 1)
+            indexTwo = randint(1, len(path) - 1)
+            path[indexOne], path[indexTwo] = path[indexTwo], path[indexOne]
         mutatedGeneration.append(path)
     return mutatedGeneration
 
+def generate_generation(baseGeneration, nodeAndDistance):
+    survivingGeneration = weed_generation(baseGeneration, nodeAndDistance)
+    crossoverAGeneration = crossover_a(survivingGeneration)
+    finalGeneration = mutation_one(crossoverAGeneration)
+    return finalGeneration
+
 get_coordinates(tspFile, coordinates)
-x = make_paths(60, 100)
-y = weed(x, coordinates)
-print(y)
+test = make_paths(1000, 100)
+for route in test:
+    print(path_distance(route, coordinates))
 
+print()
+print()
 
+for i in range(1000):
+    if i == 0:
+        test2 = generate_generation(test, coordinates)
+    else:
+        test2 = generate_generation(test2, coordinates)
+for route in test2:
+    print(path_distance(route, coordinates))
 
 tspFile.close()
