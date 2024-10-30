@@ -54,7 +54,7 @@ def offspring(parentOne, parentTwo):
             listOfOffspring.append(leftoverTwoPath.pop(0))
     return listOfOffspring
 
-def crossover_a(survivingGeneration):
+def crossover(survivingGeneration):
     offsprings = []
     midpoint = len(survivingGeneration) // 2
     for iter in range(midpoint):
@@ -65,7 +65,7 @@ def crossover_a(survivingGeneration):
             offsprings.append(offspring(parentTwo, parentOne))
     return offsprings
 
-def mutation_one(currentGeneration):
+def mutation(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
         if randint(0, 10000) < 10:
@@ -77,24 +77,46 @@ def mutation_one(currentGeneration):
 
 def generate_generation(baseGeneration, nodeAndDistance):
     survivingGeneration = weed_generation(baseGeneration, nodeAndDistance)
-    crossoverAGeneration = crossover_a(survivingGeneration)
-    finalGeneration = mutation_one(crossoverAGeneration)
+    crossoverAGeneration = crossover(survivingGeneration)
+    finalGeneration = mutation(crossoverAGeneration)
     return finalGeneration
 
+def less_members_more_iterations(nodeAndDistance):
+    #iterations = 10000
+    #members = 500
+    iterations = 1000
+    members = 50
+    distancesOfFinalPaths = []
+
+
+    finalGeneration = make_paths(members, 100)
+    for iter in range(iterations):
+        finalGeneration = generate_generation(finalGeneration, nodeAndDistance)
+
+    for path in finalGeneration:
+        distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
+    return distancesOfFinalPaths
+
+def more_members_less_iterations(nodeAndDistance):
+    #iterations = 5000
+    #members = 1000
+    iterations = 500
+    members = 100
+    distancesOfFinalPaths = []
+
+    finalGeneration = make_paths(members, 100)
+    for iter in range(iterations):
+        finalGeneration = generate_generation(finalGeneration, nodeAndDistance)
+
+    for path in finalGeneration:
+        distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
+    return distancesOfFinalPaths
+
 get_coordinates(tspFile, coordinates)
-test = make_paths(1000, 100)
-for route in test:
-    print(path_distance(route, coordinates))
 
-print()
-print()
+moreIterationsList = less_members_more_iterations(coordinates)
+moreMembersList = more_members_less_iterations(coordinates) 
 
-for i in range(1000):
-    if i == 0:
-        test2 = generate_generation(test, coordinates)
-    else:
-        test2 = generate_generation(test2, coordinates)
-for route in test2:
-    print(path_distance(route, coordinates))
+print(min(moreIterationsList), min(moreMembersList))
 
 tspFile.close()
