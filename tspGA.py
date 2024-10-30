@@ -1,9 +1,13 @@
-from tspUtil import get_coordinates, calc_distance
+from tspUtil import get_coordinates, calc_distance, plotter
 from random import shuffle, randint
+import matplotlib.pyplot as plt
+from statistics import median
 
 #initialization of variables to be used throughout program
 tspFile = open("Random100.tsp", "r")
 coordinates = {}    #holds nodes and their coordinates
+generationDictionary = {}
+generationCounter = 1
 
 #calculates distance of a path
 def path_distance(path, nodeAndDistance):
@@ -75,10 +79,22 @@ def mutation(currentGeneration):
         mutatedGeneration.append(path)
     return mutatedGeneration
 
+def compute_min_avg_max_of_generation(generation, counter, dictOfGenerations, nodeAndDistance):
+    tempDict = {}
+    for path in generation:
+        tempDict[path_distance(path, nodeAndDistance)] = path
+    minWalk = [min(tempDict.keys()), tempDict[min(tempDict.keys())]]
+    avgWalk = [median(tempDict.keys())]
+    maxWalk = [max(tempDict.keys()), tempDict[max(tempDict.keys())]]
+    dictOfGenerations[counter] = [minWalk, avgWalk, maxWalk]
+    counter += 1
+
+#generates a new generation 
 def generate_generation(baseGeneration, nodeAndDistance):
     survivingGeneration = weed_generation(baseGeneration, nodeAndDistance)
     crossoverAGeneration = crossover(survivingGeneration)
     finalGeneration = mutation(crossoverAGeneration)
+    compute_min_avg_max_of_generation(finalGeneration, generationCounter, generationDictionary, coordinates)
     return finalGeneration
 
 def less_members_more_iterations(nodeAndDistance):
@@ -115,7 +131,13 @@ def more_members_less_iterations(nodeAndDistance):
 get_coordinates(tspFile, coordinates)
 
 moreIterationsList = less_members_more_iterations(coordinates)
+print(generationDictionary)
+print()
+
+generationCounter = 1
+
 moreMembersList = more_members_less_iterations(coordinates) 
+print(generationDictionary)
 
 print(min(moreIterationsList), min(moreMembersList))
 
