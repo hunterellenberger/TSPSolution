@@ -9,7 +9,7 @@ coordinates = {}    #holds nodes and their coordinates
 generationDictionary = {}
 generationCounter = 1
 
-#calculates distance of a path
+#calculates distance of an entire path
 def path_distance(path, nodeAndDistance):
     totalLength = 0
     for i in range(0, len(path)):
@@ -20,7 +20,7 @@ def path_distance(path, nodeAndDistance):
             totalLength += calc_distance(nodeAndDistance[path[i]][0], nodeAndDistance[path[i]][1], nodeAndDistance[path[i + 1]][0], nodeAndDistance[path[i + 1]][1])
     return totalLength
 
-#makes original generation of paths
+#makes original generation of paths randomly
 def make_paths(numberOfPaths, numberOfNodes):
     initialPaths = []
     for i in range(0, numberOfPaths):
@@ -29,7 +29,7 @@ def make_paths(numberOfPaths, numberOfNodes):
         initialPaths.append(randomPath)
     return initialPaths
 
-#weeds out old generation
+#weeds out old generation leaving only the most fit 
 def weed_generation(baseGeneration, nodeAndDistance):
     survivingGeneration = []
     shuffle(baseGeneration)
@@ -58,6 +58,7 @@ def offspring(parentOne, parentTwo):
             listOfOffspring.append(leftoverTwoPath.pop(0))
     return listOfOffspring
 
+#crossovers parents within a generation
 def crossover(survivingGeneration):
     offsprings = []
     midpoint = len(survivingGeneration) // 2
@@ -69,6 +70,7 @@ def crossover(survivingGeneration):
             offsprings.append(offspring(parentTwo, parentOne))
     return offsprings
 
+#mutates survivors within a generation
 def mutation(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
@@ -79,10 +81,11 @@ def mutation(currentGeneration):
         mutatedGeneration.append(path)
     return mutatedGeneration
 
+#determines the min, median, and max distances of a generation
 def compute_min_avg_max_of_generation(generation, dictOfGenerations, nodeAndDistance):
     tempDict = {}
     global generationCounter
-    
+
     for path in generation:
         tempDict[path_distance(path, nodeAndDistance)] = path
     minWalk = [min(tempDict.keys()), tempDict[min(tempDict.keys())]]
@@ -99,7 +102,8 @@ def generate_generation(baseGeneration, nodeAndDistance):
     compute_min_avg_max_of_generation(finalGeneration, generationDictionary, coordinates)
     return finalGeneration
 
-def less_members_more_iterations(nodeAndDistance):
+#COULD BE CONDENSED INTO ONE FUNCTION
+def run_genetic_algo(members, iterations, nodeAndDistance):
     #iterations = 10000
     #members = 500
     iterations = 1000
@@ -115,30 +119,12 @@ def less_members_more_iterations(nodeAndDistance):
         distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
     return distancesOfFinalPaths
 
-def more_members_less_iterations(nodeAndDistance):
-    #iterations = 5000
-    #members = 1000
-    iterations = 500
-    members = 100
-    distancesOfFinalPaths = []
-
-    finalGeneration = make_paths(members, 100)
-    for iter in range(iterations):
-        finalGeneration = generate_generation(finalGeneration, nodeAndDistance)
-
-    for path in finalGeneration:
-        distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
-    return distancesOfFinalPaths
-
-get_coordinates(tspFile, coordinates)
-
-moreIterationsList = less_members_more_iterations(coordinates)
+moreIterationsList = run_genetic_algo(50, 1000, coordinates)
 print(generationDictionary)
-print()
 
 generationCounter = 1
 
-moreMembersList = more_members_less_iterations(coordinates) 
+moreMembersList = run_genetic_algo(100, 500, coordinates) 
 print(generationDictionary)
 
 print(min(moreIterationsList), min(moreMembersList))
