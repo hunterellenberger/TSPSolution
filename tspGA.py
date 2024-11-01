@@ -79,22 +79,24 @@ def mutation(currentGeneration):
         mutatedGeneration.append(path)
     return mutatedGeneration
 
-def compute_min_avg_max_of_generation(generation, counter, dictOfGenerations, nodeAndDistance):
+def compute_min_avg_max_of_generation(generation, dictOfGenerations, nodeAndDistance):
     tempDict = {}
+    global generationCounter
+    
     for path in generation:
         tempDict[path_distance(path, nodeAndDistance)] = path
     minWalk = [min(tempDict.keys()), tempDict[min(tempDict.keys())]]
     avgWalk = [median(tempDict.keys())]
     maxWalk = [max(tempDict.keys()), tempDict[max(tempDict.keys())]]
-    dictOfGenerations[counter] = [minWalk, avgWalk, maxWalk]
-    counter += 1
+    dictOfGenerations[generationCounter] = [minWalk, avgWalk, maxWalk]
+    generationCounter += 1
 
 #generates a new generation 
 def generate_generation(baseGeneration, nodeAndDistance):
     survivingGeneration = weed_generation(baseGeneration, nodeAndDistance)
     crossoverAGeneration = crossover(survivingGeneration)
     finalGeneration = mutation(crossoverAGeneration)
-    compute_min_avg_max_of_generation(finalGeneration, generationCounter, generationDictionary, coordinates)
+    compute_min_avg_max_of_generation(finalGeneration, generationDictionary, coordinates)
     return finalGeneration
 
 def less_members_more_iterations(nodeAndDistance):
