@@ -1,7 +1,7 @@
 from tspUtil import get_coordinates, calc_distance, plotter
 from random import shuffle, randint
 import matplotlib.pyplot as plt
-from statistics import median
+from statistics import median, stdev
 import pandas as pd
 
 #initialization of variables to be used throughout program
@@ -10,6 +10,7 @@ coordinates = {}    #holds nodes and their coordinates
 generationDictionary = {"Max": [], 
                         "Avg": [], 
                         "Min": [], 
+                        "StdDev": [],
                         "Max Path": [], 
                         "Min Path": []
                         }
@@ -89,15 +90,20 @@ def mutation(currentGeneration):
 #determines the min, median, and max distances of a generation; loads this data into a dataframe
 def compute_min_avg_max_of_generation(generation, dictOfGenerations, nodeAndDistance):
     tempDict = {}
+    pathDistances = []
+    pathRoutes = []
 
     for path in generation:
-        tempDict[path_distance(path, nodeAndDistance)] = path
-    minWalk = [min(tempDict.keys()), tempDict[min(tempDict.keys())]]
-    avgWalk = [median(tempDict.keys())]
-    maxWalk = [max(tempDict.keys()), tempDict[max(tempDict.keys())]]
+        pathDistances.append(path_distance(path, nodeAndDistance))
+        pathRoutes.append(path)
+    minWalk = [min(pathDistances), pathRoutes[pathDistances.index(min(pathDistances))]]
+    avgWalk = [median(pathDistances)]
+    maxWalk = [max(pathDistances), pathRoutes[pathDistances.index(max(pathDistances))]]
+    standardDev = stdev(pathDistances)
     dictOfGenerations["Max"].append(minWalk[0])
     dictOfGenerations["Avg"].append(avgWalk[0])
     dictOfGenerations["Min"].append(maxWalk[1])
+    dictOfGenerations["StdDev"].append(standardDev)
     dictOfGenerations["Max Path"].append(maxWalk[1])
     dictOfGenerations["Min Path"].append(minWalk[1])
 
