@@ -80,7 +80,7 @@ def crossover(survivingGeneration):
 def mutation(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
-        if randint(0, 10000) < 10:
+        if randint(0, 1000) < 10:
             indexOne = randint(1, len(path) - 1)
             indexTwo = randint(1, len(path) - 1)
             path[indexOne], path[indexTwo] = path[indexTwo], path[indexOne]
@@ -100,9 +100,9 @@ def compute_min_avg_max_of_generation(generation, dictOfGenerations, nodeAndDist
     avgWalk = [median(pathDistances)]
     maxWalk = [max(pathDistances), pathRoutes[pathDistances.index(max(pathDistances))]]
     standardDev = stdev(pathDistances)
-    dictOfGenerations["Max"].append(minWalk[0])
+    dictOfGenerations["Max"].append(maxWalk[0])
     dictOfGenerations["Avg"].append(avgWalk[0])
-    dictOfGenerations["Min"].append(maxWalk[1])
+    dictOfGenerations["Min"].append(minWalk[0])
     dictOfGenerations["StdDev"].append(standardDev)
     dictOfGenerations["Max Path"].append(maxWalk[1])
     dictOfGenerations["Min Path"].append(minWalk[1])
@@ -130,13 +130,13 @@ get_coordinates(tspFile, coordinates)
 
 moreIterationsList = run_genetic_algo(50, 1000, coordinates)
 df = pd.DataFrame(generationDictionary)
-print(df)
+df.to_excel("data.xlsx")
 
 for stat in generationDictionary:
     generationDictionary[stat].clear()
 
 moreMembersList = run_genetic_algo(100, 500, coordinates) 
 df = pd.DataFrame(generationDictionary)
-print(df)
+df.to_excel("data.xlsx")
 
 tspFile.close()
