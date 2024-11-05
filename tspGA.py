@@ -57,8 +57,8 @@ def offspring(parentOne, parentTwo):
     for element in parentTwo:
         if element not in subarrayOfOne:
             leftoverTwoPath.append(element)
-    for iter in range(0, len(parentOne)):
-        if extractStart <= iter < extractEnd:
+    for i in range(0, len(parentOne)):
+        if extractStart <= i < extractEnd:
             listOfOffspring.append(subarrayOfOne.pop(0))
         else:
             listOfOffspring.append(leftoverTwoPath.pop(0))
@@ -68,9 +68,9 @@ def offspring(parentOne, parentTwo):
 def crossover(survivingGeneration):
     offsprings = []
     midpoint = len(survivingGeneration) // 2
-    for iter in range(midpoint):
-        parentOne = survivingGeneration[iter]
-        parentTwo = survivingGeneration[iter + midpoint]
+    for i in range(midpoint):
+        parentOne = survivingGeneration[i]
+        parentTwo = survivingGeneration[i + midpoint]
         for j in range(2):
             offsprings.append(offspring(parentOne, parentTwo))
             offsprings.append(offspring(parentTwo, parentOne))
@@ -80,7 +80,7 @@ def crossover(survivingGeneration):
 def mutation(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
-        if randint(0, 1000) < 10:
+        if randint(0, 100) < 10:
             indexOne = randint(1, len(path) - 1)
             indexTwo = randint(1, len(path) - 1)
             path[indexOne], path[indexTwo] = path[indexTwo], path[indexOne]
@@ -119,7 +119,7 @@ def run_genetic_algo(members, iterations, nodeAndDistance):
     distancesOfFinalPaths = []
 
     finalGeneration = make_paths(members, 100)
-    for iter in range(iterations):
+    for i in range(iterations):
         finalGeneration = generate_generation(finalGeneration, nodeAndDistance)
 
     for path in finalGeneration:
@@ -133,13 +133,12 @@ get_coordinates(tspFile, coordinates)
 moreIterationsList = run_genetic_algo(50, 1000, coordinates)
 df = pd.DataFrame(generationDictionary)
 
-dynamic_plotter(generationDictionary["Min Path"], coordinates)
-
 for stat in generationDictionary:
     generationDictionary[stat].clear()
 
 moreMembersList = run_genetic_algo(100, 500, coordinates) 
 df2 = pd.DataFrame(generationDictionary)
+dynamic_plotter(generationDictionary["Min Path"], coordinates, 1000)
 with pd.ExcelWriter("data.xlsx") as writer:
     df.to_excel(writer, sheet_name="more_iterations")
     df2.to_excel(writer, sheet_name="less_iterations")

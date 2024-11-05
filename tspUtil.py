@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from itertools import count
 import numpy as np 
 
 #reads in file and seperates the coordinates into pairs within a dictionary
@@ -45,16 +47,25 @@ def plotter(points, pathMap):
     plt.show()
 
 #dynamically plots paths one after another
-def dynamic_plotter(pathsOfMin, nodePlusDistances):
-    plt.style.use("dark_background")
+def dynamic_plotter(pathsOfMin, nodePlusDistances, iterations):
+    #plt.style.use("dark_background")
+    i = 0
 
-    xCord = [[]]
-    yCord = [[]]
-    for iter, path in enumerate(pathsOfMin):
-        for point in path:
-            xCord[iter].append(nodePlusDistances[point][0])
-            yCord[iter].append(nodePlusDistances[point][1])
-        xCord.append([])
-        yCord.append([])
+    def animate(i):
+        xCord = []
+        yCord = []
+        for point in pathsOfMin[i]:
+            xCord.append(nodePlusDistances[point][0])
+            yCord.append(nodePlusDistances[point][1])
+        i += 1
 
-        plt.plot(xCord, yCord)
+        plt.cla()
+        for j in range(0, len(xCord)):
+            plt.plot(xCord[:j + 1], yCord[:j + 1], 'red')
+        plt.plot(xCord, yCord, 'b*')
+        plt.title(f"{i}")
+
+    ani =  animation.FuncAnimation(plt.gcf(), animate, interval=1, frames=iterations)
+    plt.tight_layout()
+    plt.show()
+    plt.close()
