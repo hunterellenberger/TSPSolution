@@ -43,3 +43,18 @@ def plotter(points, pathMap):
     plt.axis([0, 100, 0, 100])
 
     plt.show()
+
+#dynamically plots paths one after another
+def dynamic_plotter(pathsOfMin, nodePlusDistances):
+    plt.style.use("dark_background")
+
+    xCord = [[]]
+    yCord = [[]]
+    for iter, path in enumerate(pathsOfMin):
+        for point in path:
+            xCord[iter].append(nodePlusDistances[point][0])
+            yCord[iter].append(nodePlusDistances[point][1])
+        xCord.append([])
+        yCord.append([])
+
+        plt.plot(xCord, yCord)

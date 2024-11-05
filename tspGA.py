@@ -1,4 +1,4 @@
-from tspUtil import get_coordinates, calc_distance, plotter
+from tspUtil import get_coordinates, calc_distance, dynamic_plotter
 from random import shuffle, randint
 import matplotlib.pyplot as plt
 from statistics import median, stdev
@@ -126,17 +126,22 @@ def run_genetic_algo(members, iterations, nodeAndDistance):
         distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
     return distancesOfFinalPaths
 
+
+
 get_coordinates(tspFile, coordinates)
 
 moreIterationsList = run_genetic_algo(50, 1000, coordinates)
 df = pd.DataFrame(generationDictionary)
-df.to_excel("data.xlsx")
+
+dynamic_plotter(generationDictionary["Min Path"], coordinates)
 
 for stat in generationDictionary:
     generationDictionary[stat].clear()
 
 moreMembersList = run_genetic_algo(100, 500, coordinates) 
-df = pd.DataFrame(generationDictionary)
-df.to_excel("data.xlsx")
+df2 = pd.DataFrame(generationDictionary)
+with pd.ExcelWriter("data.xlsx") as writer:
+    df.to_excel(writer, sheet_name="more_iterations")
+    df2.to_excel(writer, sheet_name="less_iterations")
 
 tspFile.close()
