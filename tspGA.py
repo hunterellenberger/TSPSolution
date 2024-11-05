@@ -138,7 +138,7 @@ for stat in generationDictionary:
 
 moreMembersList = run_genetic_algo(100, 500, coordinates) 
 df2 = pd.DataFrame(generationDictionary)
-dynamic_plotter(generationDictionary["Min Path"], coordinates, 1000)
+dynamic_plotter(generationDictionary["Min Path"], coordinates)
 with pd.ExcelWriter("data.xlsx") as writer:
     df.to_excel(writer, sheet_name="more_iterations")
     df2.to_excel(writer, sheet_name="less_iterations")

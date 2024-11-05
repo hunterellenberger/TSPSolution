@@ -47,8 +47,8 @@ def plotter(points, pathMap):
     plt.show()
 
 #dynamically plots paths one after another
-def dynamic_plotter(pathsOfMin, nodePlusDistances, iterations):
-    #plt.style.use("dark_background")
+def dynamic_plotter(pathsOfMin, nodePlusDistances):
+    plt.style.use("dark_background")
     i = 0
 
     def animate(i):
@@ -65,7 +65,7 @@ def dynamic_plotter(pathsOfMin, nodePlusDistances, iterations):
         plt.plot(xCord, yCord, 'b*')
         plt.title(f"{i}")
 
-    ani =  animation.FuncAnimation(plt.gcf(), animate, interval=1, frames=iterations)
+    ani =  animation.FuncAnimation(plt.gcf(), animate, interval=1, frames=len(pathsOfMin), repeat=False)
     plt.tight_layout()
     plt.show()
     plt.close()
