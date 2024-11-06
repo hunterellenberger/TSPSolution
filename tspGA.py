@@ -1,8 +1,9 @@
 from tspUtil import get_coordinates, calc_distance, dynamic_plotter
 from random import shuffle, randint
-import matplotlib.pyplot as plt
 from statistics import median, stdev
 import pandas as pd
+import time
+start = time.time()
 
 #initialization of variables to be used throughout program
 tspFile = open("Random100.tsp", "r")
@@ -126,21 +127,27 @@ def run_genetic_algo(members, iterations, nodeAndDistance):
         distancesOfFinalPaths.append(path_distance(path, nodeAndDistance))
     return distancesOfFinalPaths
 
-
-
+#loads points and coordinates into dictionary
 get_coordinates(tspFile, coordinates)
 
+#runs GA implementation with less members per generation, but more generations. Then loads it into dataframe and seperately dynamically plots it
 moreIterationsList = run_genetic_algo(50, 1000, coordinates)
 df = pd.DataFrame(generationDictionary)
+#dynamic_plotter(generationDictionary["Min Path"], coordinates)
 
+#clears generation dictionary so it can be reloaded by new cariation of GA
 for stat in generationDictionary:
     generationDictionary[stat].clear()
 
+#runs GA implementation with more members per generation, but less generations. Then loads it into dataframe and seperately dynamically plots it
 moreMembersList = run_genetic_algo(100, 500, coordinates) 
 df2 = pd.DataFrame(generationDictionary)
-dynamic_plotter(generationDictionary["Min Path"], coordinates)
+#dynamic_plotter(generationDictionary["Min Path"], coordinates)
+
 with pd.ExcelWriter("data.xlsx") as writer:
     df.to_excel(writer, sheet_name="more_iterations")
     df2.to_excel(writer, sheet_name="less_iterations")
 
+end = time.time()
+print("The total time it took the program to execute is:", (end - start) * 10**3, "ms")
 tspFile.close()
