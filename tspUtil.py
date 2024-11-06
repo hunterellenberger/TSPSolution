@@ -67,5 +67,5 @@ def dynamic_plotter(pathsOfMin, nodePlusDistances):
 
     ani =  animation.FuncAnimation(plt.gcf(), animate, interval=1, frames=len(pathsOfMin), repeat=False)
     plt.tight_layout()
-    plt.show()
+    ani.save("temp.mp4", writer="ffmpeg")
     plt.close()
