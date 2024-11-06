@@ -81,7 +81,7 @@ def crossover(survivingGeneration):
 def mutation(currentGeneration):
     mutatedGeneration = []
     for path in currentGeneration:
-        if randint(0, 100) < 10:
+        if randint(0, 1000) < 10:
             indexOne = randint(1, len(path) - 1)
             indexTwo = randint(1, len(path) - 1)
             path[indexOne], path[indexTwo] = path[indexTwo], path[indexOne]
@@ -131,18 +131,18 @@ def run_genetic_algo(members, iterations, nodeAndDistance):
 get_coordinates(tspFile, coordinates)
 
 #runs GA implementation with less members per generation, but more generations. Then loads it into dataframe and seperately dynamically plots it
-moreIterationsList = run_genetic_algo(50, 1000, coordinates)
+moreIterationsList = run_genetic_algo(500, 5000, coordinates)
 df = pd.DataFrame(generationDictionary)
-#dynamic_plotter(generationDictionary["Min Path"], coordinates)
+dynamic_plotter(generationDictionary["Min Path"], coordinates, "moreIterations")
 
 #clears generation dictionary so it can be reloaded by new cariation of GA
 for stat in generationDictionary:
     generationDictionary[stat].clear()
 
 #runs GA implementation with more members per generation, but less generations. Then loads it into dataframe and seperately dynamically plots it
-moreMembersList = run_genetic_algo(100, 500, coordinates) 
+moreMembersList = run_genetic_algo(1000, 2500, coordinates) 
 df2 = pd.DataFrame(generationDictionary)
-#dynamic_plotter(generationDictionary["Min Path"], coordinates)
+dynamic_plotter(generationDictionary["Min Path"], coordinates, "moreMembers")
 
 with pd.ExcelWriter("data.xlsx") as writer:
     df.to_excel(writer, sheet_name="more_iterations")

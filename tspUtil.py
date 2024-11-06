@@ -47,7 +47,7 @@ def plotter(points, pathMap):
     plt.show()
 
 #dynamically plots paths one after another
-def dynamic_plotter(pathsOfMin, nodePlusDistances):
+def dynamic_plotter(pathsOfMin, nodePlusDistances, fileName):
     plt.style.use("dark_background")
     i = 0
 
@@ -65,7 +65,8 @@ def dynamic_plotter(pathsOfMin, nodePlusDistances):
         plt.plot(xCord, yCord, 'b*')
         plt.title(f"{i}")
 
-    ani =  animation.FuncAnimation(plt.gcf(), animate, interval=1, frames=len(pathsOfMin), repeat=False)
+    ani =  animation.FuncAnimation(plt.gcf(), animate, interval=10, frames=len(pathsOfMin), repeat=False)
     plt.tight_layout()
-    ani.save("temp.mp4", writer="ffmpeg")
+    writerVideo = animation.FFMpegWriter(fps=60) 
+    ani.save(f"{fileName}.mp4", writer=writerVideo)
     plt.close()
