@@ -89,7 +89,7 @@ def mutation(currentGeneration):
     return mutatedGeneration
 
 #determines the min, median, and max distances of a generation; loads this data into a dataframe
-def compute_min_avg_max_of_generation(generation, dictOfGenerations, nodeAndDistance):
+def compute_stats_of_generation(generation, dictOfGenerations, nodeAndDistance):
     tempDict = {}
     pathDistances = []
     pathRoutes = []
@@ -113,7 +113,7 @@ def generate_generation(baseGeneration, nodeAndDistance):
     survivingGeneration = weed_generation(baseGeneration, nodeAndDistance)
     crossoverAGeneration = crossover(survivingGeneration)
     finalGeneration = mutation(crossoverAGeneration)
-    compute_min_avg_max_of_generation(finalGeneration, generationDictionary, coordinates)
+    compute_stats_of_generation(finalGeneration, generationDictionary, coordinates)
     return finalGeneration
 
 def run_genetic_algo(members, iterations, nodeAndDistance):
